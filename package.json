@@ -14,5 +14,8 @@
   "license": "Affero-GPL",
   "bugs": {
     "url": "https://github.com/OpenBookPrices/get-book-prices/issues"
+  },
+  "dependencies": {
+    "commander": "~2.0.0"
   }
 }
