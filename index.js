@@ -44,8 +44,9 @@ function handleInitialRequest (res) {
 
   // console.log(res.body);
 
-  async.each(
+  async.eachLimit(
     res.body.results,
+    6,
     handleVendorRequest,
     allDone
   );
