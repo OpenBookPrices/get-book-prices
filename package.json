@@ -4,7 +4,7 @@
   "description": "Command line tool to fetch and display book prices, shipping costs and availability from lots of sellers.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -16,6 +16,11 @@
     "url": "https://github.com/OpenBookPrices/get-book-prices/issues"
   },
   "dependencies": {
-    "commander": "~2.0.0"
+    "commander": "~2.0.0",
+    "ean": "0.0.2",
+    "underscore": "~1.5.2"
+  },
+  "devDependencies": {
+    "mocha": "~1.14.0"
   }
 }
