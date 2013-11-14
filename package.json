@@ -18,7 +18,8 @@
   "dependencies": {
     "commander": "~2.0.0",
     "ean": "0.0.2",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "superagent": "~0.15.7"
   },
   "devDependencies": {
     "mocha": "~1.14.0"
