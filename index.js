@@ -1,14 +1,31 @@
-var program = require('commander'),
-    isbn    = require('./src/isbn'),
-    async   = require('async'),
-    _       = require('underscore'),
-    request = require('superagent');
+var packageJSON    = require('./package.json'),
+    util           = require('util'),
+    program        = require('commander'),
+    isbn           = require('./src/isbn'),
+    async          = require('async'),
+    _              = require('underscore'),
+    superagent     = require('superagent');
 
 var apiBase = 'http://api.127.0.0.1.xip.io:3000/v1/';
 // var apiBase = 'http://api.openbookprices.com/v1/';
 
+var version = packageJSON.version;
+var userAgent = util.format("%s v%s", packageJSON.name, packageJSON.version);
+
+function getJSON (url, cb) {
+  return superagent
+    .get(url)
+    .set("User-Agent", userAgent)
+    .on("error", function (err) {
+      console.error(err);
+      process.exit();
+    })
+    .end(cb);
+}
+
+
 program
-  .version('0.0.1')
+  .version(version)
   .usage('[options] <isbn>')
   .parse(process.argv);
 
@@ -24,13 +41,10 @@ if (!isbn ) {
 
 var initialURL = apiBase + "books/" + isbn + "/prices";
 
-request
-  .get(initialURL)
-  .on("error", function (err) {
-    console.error(err);
-    process.exit();
-  })
-  .end(handleInitialRequest);
+getJSON(
+  initialURL,
+  handleInitialRequest
+);
 
 
 function handleInitialRequest (res) {
@@ -61,17 +75,12 @@ function handleVendorRequest (data, cb) {
     // console.log("Retrying in %s", data.meta.retryDelay);
     setTimeout(
       function () {
-        // console.log("GET %s", data.request.url);
-
-        request
-          .get(data.request.url)
-          .on('error', function (err) {
-            console.warn(err);
-            cb();
-          })
-          .end(function (res) {
+        getJSON(
+          data.request.url,
+          function (res) {
             handleVendorRequest(res.body, cb);
-          });
+          }
+        );
       },
       data.meta.retryDelay * 1000
     );
