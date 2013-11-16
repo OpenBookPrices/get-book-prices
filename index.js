@@ -23,9 +23,10 @@ function getJSON (url, cb) {
     .end(cb);
 }
 
-
 program
   .version(version)
+  .option('--country [country]',  "specify the country (eg 'GB' or 'US')")
+  .option('--currency [currency]', "specify the currency (eg 'GBP' or 'USD')")
   .usage('[options] <isbn>')
   .parse(process.argv);
 
@@ -40,6 +41,14 @@ if (!isbn ) {
 }
 
 var initialURL = apiBase + "books/" + isbn + "/prices";
+
+if (program.country) {
+  initialURL += "/" + program.country;
+
+  if (program.currency) {
+    initialURL += "/" + program.currency;
+  }
+}
 
 getJSON(
   initialURL,
